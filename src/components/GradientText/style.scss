@@ -1,0 +1,20 @@
+// styles.scss
+
+// Define gradient colors
+$gradient-colors: (#4F46E5, #4299E1, #1A202C); // Blueish to black
+
+// Define mixin to create gradient background
+@mixin gradient-text {
+  background: linear-gradient(45deg, $gradient-colors);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); // Add a slight text shadow
+}
+
+// Define styles for the large gradient text
+.large-gradient-text {
+  font-size: 4rem;
+  font-weight: bold;
+  @include gradient-text;
+}
