@@ -1,4 +1,4 @@
-import peer from "peer";
+import peer from "@/service/peerService";
 
 export default function useCall(
   setRemoteStream: setMediaStream,

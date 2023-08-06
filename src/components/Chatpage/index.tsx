@@ -1,6 +1,3 @@
-import { AccountCircle } from "@mui/icons-material";
-import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
-import WifiCallingOutlinedIcon from "@mui/icons-material/WifiCallingOutlined";
 import { useState } from "react";
 import "./ChatPage.scss";
 import useCounter from "@/hooks/useCounter";
@@ -10,8 +7,8 @@ import CallScreen from "../CallScreen/CallScreen";
 import useAnswerCall from "@/hooks/useAnswerCall";
 import Popup from "../Popup/Popup";
 import useAudio from "@/hooks/useAudio";
-// import { useEffect } from "react";
-// import peer from "peer";
+import useNotification from "@/hooks/useNotification";
+import Users from "../Users/Users";
 
 const ChatPage = (props: Component.ChatPageProps) => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
@@ -23,25 +20,13 @@ const ChatPage = (props: Component.ChatPageProps) => {
   const [answerObject, setAnswerObject] = useState<Hooks.Connection | null>(null);
   const [callObject, setCallObject] = useState<Hooks.Connection | null>(null);
   const [selectedUser, setSelectedUser] = useState<any>(null);
-  useAudio(isIncomingCall)
+
   const { countOnlineUsers } = useCounter();
   const currentlyActiveUsers = countOnlineUsers(props.users);
   useAnswerCall(setAnswerObject, setIsIncomingCall);
-
+  useAudio(isIncomingCall);
+  useNotification(isIncomingCall);
   const activeUsers = getUsers(props.users, socket.id);
-
-  // useEffect(() => {
-  //   if (!isCall) {
-  //     setLocalStream(null);
-  //     setRemoteStream(null);
-  //     setAnswerObject(undefined);
-  //     // peer?._removeConnection(callObject!)
-  //     // peer?._removeConnection(answerObject!)
-  //     // answerObject?.close();
-  //     // callObject?.close();
-  //     console.log("the call is closed");
-  //   }
-  // }, [isCall]);
 
   const chatHistory = [
     { sender: "User 1", message: "Hello there!" },
@@ -90,7 +75,6 @@ const ChatPage = (props: Component.ChatPageProps) => {
         toggle={handleCallScreenToggle}
         answerObject={answerObject}
         setAnswerObject={setAnswerObject}
-        
       />
       <div className='chat-page'>
         <div className='active-users'>
@@ -99,36 +83,12 @@ const ChatPage = (props: Component.ChatPageProps) => {
             <span> ({currentlyActiveUsers})</span>
           </h2>
           <ul className='active-users-list border'>
-            {activeUsers.map((user: TActiveUsers) => (
-              <li
-                key={user.peerid}
-                className={`flex items-center p-2 rounded-lg mb-2 cursor-pointer ${
-                  selectedUser === user ? "bg-blue-500 text-white font-bold" : "hover:bg-gray-200"
-                }`}
-                onClick={() => handleUserSelect(user)}
-              >
-                <AccountCircle className='profile-pic mr-2 text-blue-500' />
-                <span className='mr-2'>{user.currentUser ? "You" : user.socketid}</span>
-                {/* {user.status === "idle" && (
-                <FiberManualRecord className='status-indicator text-yellow-500' />
-                )}
-                {user.status === "in-call" && (
-                  <FiberManualRecord className='status-indicator text-green-500' />
-                  )}
-                  {user.status === "offline" && (
-                    <FiberManualRecord className='status-indicator text-red-500' />
-                  )} */}
-                <div className='flex items-center ml-auto'>
-                  <VideocamOutlinedIcon
-                    onClick={handleVideoClick.bind(null, user.peerid)}
-                    className={`icon text-blue-500 ${selectedUser === user ? "text-white" : ""}`}
-                  />
-                  <WifiCallingOutlinedIcon
-                    className={`icon text-blue-500 ${selectedUser === user ? "text-white" : ""}`}
-                  />
-                </div>
-              </li>
-            ))}
+            <Users
+              activeUsers={activeUsers}
+              handleUserSelect={handleUserSelect}
+              handleVideoClick={handleVideoClick}
+              selectedUser='xyz'
+            />
           </ul>
         </div>
         <div className='chat-history relative'>

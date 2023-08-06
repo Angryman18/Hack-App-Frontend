@@ -24,8 +24,9 @@
       "@/components/*": ["./src/components/*"],
       "@/hooks/*": ["./src/hooks/*"],
       "@/views/*": ["./src/views/*"],
-      "socket": ["./src/socket"],
-      "peer": ["./src/peerService"]
+      "@/service/*": ["./src/Service/*"],
+      "socket": ["./src/Service/socketService"],
+      "peer": ["./src/Service/peerService"]
     }
   },
   "include": ["src", "global.d.ts"],

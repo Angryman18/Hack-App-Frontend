@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import peer from "peer";
+import peer from "@/service/peerService";
 
 export default function useAnswerCall(
   setAnswerObject: setCallObject,

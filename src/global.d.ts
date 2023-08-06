@@ -2,6 +2,7 @@ import Peer, { MediaConnection, PeerConnectOption } from "peerjs";
 import React from "react";
 
 declare global {
+  declare type KeyPick<Interface, Key> = Key extends keyof Interface ? Interface[Key] : never;
   type TPeerInfo = { peerid: string; [key: string]: string };
   type TUser = [string, TPeerInfo];
   type TUsers = { [key: string]: peerInfo };
@@ -82,6 +83,13 @@ declare global {
     declare type Video = {
       videoEnabled: boolean;
       onClick: () => void | any;
+    };
+
+    declare type Users = {
+      activeUsers: TActiveUsers[];
+      handleUserSelect: (use: TActiveUsers) => void | any;
+      selectedUser: string;
+      handleVideoClick: (peerid: KeyPick<TPeerInfo, "peerid">) => void | any;
     };
   }
 }
