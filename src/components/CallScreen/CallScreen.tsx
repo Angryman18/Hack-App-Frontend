@@ -1,6 +1,6 @@
 import useGetMediaStream from "@/hooks/useGetMediaStream";
 import Modal from "../Modal/Modal";
-import { useEffect, useState, useLayoutEffect } from "react";
+import {  useState, useLayoutEffect } from "react";
 import StreamPlayer from "../Streambox/StreamPlayer";
 import Mute from "../StreamElements/Mute";
 import { Stack } from "@mui/material";
@@ -24,7 +24,7 @@ export default function CallScreen({
   setCallObject,
   setAnswerObject,
 }: Component.CallScreen) {
-  const [error, setError] = useState<Error | null>(null);
+  const [, setError] = useState<Error | null>(null);
   const [videoEnabled, setVideoEnabled] = useState<boolean>(true);
   const [isMute, setIsMute] = useState<boolean>(false);
   const [isMediaLoading, setIsMediaLoading] = useState<boolean>(true);

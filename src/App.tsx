@@ -1,4 +1,4 @@
-import Layout from "./Layout/Index";
+import Layout from "./Layout";
 import LandingPage from "./components/LandingPage";
 import { Routes, Route } from "react-router";
 import ChatRoom from "./views/ChatRoom";
