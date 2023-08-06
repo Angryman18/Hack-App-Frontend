@@ -2,7 +2,7 @@ import GradientText from "./GradientText/GradientText";
 import Button from "./Button/Index";
 import { useEffect } from "react";
 import peer from "peer";
-import { socket } from "socket";
+import socket from "socket";
 
 const LandingPage = () => {
   useEffect(() => {

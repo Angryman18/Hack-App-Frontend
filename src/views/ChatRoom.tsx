@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ChatPage from "@/components/Chatpage";
-import { socket } from "socket";
+import socket from "socket";
 import useOnlineUsers from "@/hooks/useOnlineUsers";
 import useInit from "@/hooks/useInit";
 

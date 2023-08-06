@@ -12,15 +12,15 @@ const Modal = ({ open, toggle, children, onClose }: Component.ModalProps): JSX.E
       <Stack sx={{ display: "block", marginLeft: "auto" }}>
         <IconButton
           edge='start'
-          sx={{ margin: [1, 5] }}
           color='inherit'
+          sx={{ margin: [1, 5] }}
           onClick={onClose}
           aria-label='close'
         >
           <CloseIcon fontSize='large' />
         </IconButton>
       </Stack>
-      {children}
+      <Stack sx={{ marginTop: -6 }}>{children}</Stack>
     </Dialog>
   );
 };

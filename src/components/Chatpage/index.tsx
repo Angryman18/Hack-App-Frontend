@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./ChatPage.scss";
 import useCounter from "@/hooks/useCounter";
 import useUsers from "@/hooks/useUsers";
-import { socket } from "socket";
+import socket from "socket";
 import CallScreen from "../CallScreen/CallScreen";
 import useAnswerCall from "@/hooks/useAnswerCall";
 import Popup from "../Popup/Popup";

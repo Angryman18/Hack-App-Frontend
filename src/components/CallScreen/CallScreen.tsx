@@ -1,15 +1,16 @@
 import useGetMediaStream from "@/hooks/useGetMediaStream";
 import Modal from "../Modal/Modal";
-import {  useState, useLayoutEffect } from "react";
+import { useState, useLayoutEffect } from "react";
 import StreamPlayer from "../Streambox/StreamPlayer";
 import Mute from "../StreamElements/Mute";
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import Video from "../StreamElements/Video";
 import { default as MyButton } from "../Button/ButtonA";
 import useCall from "@/hooks/useCall";
 import CircularProgress from "@mui/material/CircularProgress";
 import useAnswerRedirect from "@/hooks/useAnswerRedirect";
 import useResetActions from "@/hooks/useResetActions";
+import End from "../StreamElements/End";
 
 export default function CallScreen({
   visible,
@@ -53,9 +54,13 @@ export default function CallScreen({
     toggle();
   };
 
-  const handleMuteClick = () => setIsMute(!isMute);
+  const handleMuteClick = () => {
+    setIsMute(!isMute);
+    const isAudioEnabled = localStream!.getAudioTracks()?.[0]?.enabled;
+    localStream!.getAudioTracks()[0].enabled = !isAudioEnabled;
+  };
   const handleVideoClick = (): void => {
-    const isVideoEnabled = localStream!.getVideoTracks()[0].enabled;
+    const isVideoEnabled = localStream!.getVideoTracks()?.[0]?.enabled;
     localStream!.getVideoTracks()[0].enabled = !isVideoEnabled;
     setVideoEnabled(!videoEnabled);
   };
@@ -68,6 +73,9 @@ export default function CallScreen({
 
   return (
     <Modal open={visible} toggle={toggle} onClose={onClose}>
+      <Typography sx={{ margin: "auto", marginBottom: 2 }} variant='h4'>
+        Are you ready?
+      </Typography>
       <Stack direction='row' justifyContent='space-around' gap={4}>
         {!isMediaLoading && (
           <StreamPlayer playing width={720} height={405} url={localStream!} muted />
@@ -86,6 +94,7 @@ export default function CallScreen({
       >
         <Mute isMute={isMute} onClick={handleMuteClick} />
         <Video videoEnabled={videoEnabled} onClick={handleVideoClick} />
+        <End onClick={onClose} />
       </Stack>
       <Stack
         sx={{ marginTop: 4 }}

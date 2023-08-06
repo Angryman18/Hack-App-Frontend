@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import peer from "@/service/peerService";
-import { socket } from "socket";
+import socket from "socket";
 
 export default function useInit(): void {
   useEffect(() => {
