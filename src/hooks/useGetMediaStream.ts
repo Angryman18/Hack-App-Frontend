@@ -12,13 +12,6 @@ export default function useGetMediaStream(
     try {
       setIsMediaLoading(true);
       const stream: MediaStream = await navigator.mediaDevices.getUserMedia(CONSTRAINTS);
-      // if (!visible) {
-      //   stream.getTracks().forEach((track: MediaStreamTrack) => {
-      //     track.stop();
-      //     console.log("Media Stopped", visible)
-      //     return setMediaStream(null);
-      //   });
-      // }
       setMediaStream(stream);
     } catch (err) {
       setErrorMedia(err as Error);

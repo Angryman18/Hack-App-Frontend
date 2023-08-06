@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Transition from "../Transitions";
 import { Stack } from "@mui/material";
 
-const Modal = ({ open, toggle, children, onClose }: Component.ModalProps): any => {
+const Modal = ({ open, toggle, children, onClose }: Component.ModalProps): JSX.Element => {
   return (
     <Dialog fullScreen open={open} onClose={toggle} TransitionComponent={Transition}>
       <Stack sx={{ display: "block", marginLeft: "auto" }}>

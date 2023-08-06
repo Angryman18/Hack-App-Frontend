@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 
 export default function useAnswerRedirect({
-  isIncomingCall,
+  answerObject,
   isMediaLoading,
   localStream,
   setRemoteStream,
 }: TuseAnswerRedirect): void {
   useEffect((): void => {
-    if (isIncomingCall && !isMediaLoading) {
-      isIncomingCall.answer(localStream!);
-      isIncomingCall.on("stream", setRemoteStream);
+    if (answerObject && !isMediaLoading && localStream) {
+      answerObject.answer(localStream);
+      answerObject.on("stream", setRemoteStream);
     }
-  }, [isIncomingCall, isMediaLoading]);
+  }, [answerObject, isMediaLoading, localStream]);
 }

@@ -16,7 +16,10 @@ declare global {
   declare type setIsMediaLoading = (val: boolean) => void | any;
   declare type callTheUser = (socketId: string, localStream: MediaStream) => void | any;
   declare type setIsIncomingCall = (val: boolean) => void | any;
-  declare type setCallObject = (MediaConnection: MediaConnection) => void | any;
+  declare type setCallObject = (MediaConnection: MediaConnection | null) => void | any;
+
+  declare type setVideoEnabled = setIsMediaLoading;
+  declare type setIsMute = setIsMediaLoading;
 
   interface SourceProps {
     media?: string;
@@ -33,7 +36,7 @@ declare global {
   }
 
   declare type TuseAnswerRedirect = {
-    isIncomingCall: Hooks.Connection | undefined;
+    answerObject: Hooks.Connection | null;
     isMediaLoading: boolean;
     localStream: MediaStream | null;
     setRemoteStream: setMediaStream;
@@ -66,7 +69,10 @@ declare global {
       setRemoteStream: setMediaStream;
       localStream: MediaStream | null;
       setLocalStream: setMediaStream;
-      isIncomingCall: Hooks.Connection | undefined;
+      answerObject: Hooks.Connection | null;
+      callObject: Hooks.Connection | null;
+      setCallObject: setCallObject;
+      setAnswerObject: setCallObject;
     };
 
     declare type Mute = {

@@ -9,22 +9,39 @@ import { socket } from "socket";
 import CallScreen from "../CallScreen/CallScreen";
 import useAnswerCall from "@/hooks/useAnswerCall";
 import Popup from "../Popup/Popup";
+import useAudio from "@/hooks/useAudio";
+// import { useEffect } from "react";
+// import peer from "peer";
 
 const ChatPage = (props: Component.ChatPageProps) => {
-  const { countOnlineUsers } = useCounter();
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [isCall, setIsCall] = useState<boolean>(false);
   const { getUsers } = useUsers();
-  const currentlyActiveUsers = countOnlineUsers(props.users);
   const [calleeid, setCalleeId] = useState("");
   const [isIncomingCall, setIsIncomingCall] = useState<boolean>(false);
-  const [callObject, setCallObject] = useState<Hooks.Connection | undefined>(undefined);
+  const [answerObject, setAnswerObject] = useState<Hooks.Connection | null>(null);
+  const [callObject, setCallObject] = useState<Hooks.Connection | null>(null);
   const [selectedUser, setSelectedUser] = useState<any>(null);
+  useAudio(isIncomingCall)
+  const { countOnlineUsers } = useCounter();
+  const currentlyActiveUsers = countOnlineUsers(props.users);
+  useAnswerCall(setAnswerObject, setIsIncomingCall);
 
   const activeUsers = getUsers(props.users, socket.id);
 
-  useAnswerCall(setCallObject, setIsIncomingCall);
+  // useEffect(() => {
+  //   if (!isCall) {
+  //     setLocalStream(null);
+  //     setRemoteStream(null);
+  //     setAnswerObject(undefined);
+  //     // peer?._removeConnection(callObject!)
+  //     // peer?._removeConnection(answerObject!)
+  //     // answerObject?.close();
+  //     // callObject?.close();
+  //     console.log("the call is closed");
+  //   }
+  // }, [isCall]);
 
   const chatHistory = [
     { sender: "User 1", message: "Hello there!" },
@@ -66,10 +83,14 @@ const ChatPage = (props: Component.ChatPageProps) => {
         setRemoteStream={setRemoteStream}
         localStream={localStream}
         setLocalStream={setLocalStream}
+        callObject={callObject}
+        setCallObject={setCallObject}
         calleeid={calleeid}
         visible={isCall}
         toggle={handleCallScreenToggle}
-        isIncomingCall={callObject}
+        answerObject={answerObject}
+        setAnswerObject={setAnswerObject}
+        
       />
       <div className='chat-page'>
         <div className='active-users'>
