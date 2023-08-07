@@ -6,7 +6,10 @@ const useAudio = (playing: boolean) => {
   useEffect(() => {
     audio.loop = true;
     if (playing) audio.play();
-    else audio.pause();
+    else {
+      audio.pause();
+      audio.currentTime = 0;
+    }
   }, [playing]);
 };
 

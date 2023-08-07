@@ -3,9 +3,9 @@ import { useCallback, useEffect } from "react";
 const CONSTRAINTS = { audio: true, video: true };
 
 export default function useGetMediaStream(
-  setMediaStream: setMediaStream,
-  setErrorMedia: setErrorMedia,
-  setIsMediaLoading: setIsMediaLoading,
+  setMediaStream: StateSetter<MediaStream | null>,
+  setErrorMedia: StateSetter<Error | null>,
+  setIsMediaLoading: StateSetter<boolean>,
   visible?: boolean
 ): { handleVideoTracks: () => void } {
   const handleVideoTracks = useCallback(async () => {

@@ -10,6 +10,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@/components": "/src/components",
+      "@/const": "/src/const",
       socket: "/src/Service/socketService",
       peer: "/src/Service/peerService",
       "@/hooks": "/src/hooks",

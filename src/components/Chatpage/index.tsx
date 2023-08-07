@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import "./ChatPage.scss";
 import useCounter from "@/hooks/useCounter";
 import useUsers from "@/hooks/useUsers";
@@ -9,13 +9,14 @@ import Popup from "../Popup/Popup";
 import useAudio from "@/hooks/useAudio";
 import useNotification from "@/hooks/useNotification";
 import Users from "../Users/Users";
+import useIdentifyCaller from "@/hooks/useIdentifyCaller";
 
 const ChatPage = (props: Component.ChatPageProps) => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
   const [localStream, setLocalStream] = useState<MediaStream | null>(null);
   const [isCall, setIsCall] = useState<boolean>(false);
-  const { getUsers } = useUsers();
-  const [calleeid, setCalleeId] = useState("");
+  const [callie, setCallie] = useState<TActiveUsers>();
+  const [caller, setCaller] = useState<Caller | null>(null);
   const [isIncomingCall, setIsIncomingCall] = useState<boolean>(false);
   const [answerObject, setAnswerObject] = useState<Hooks.Connection | null>(null);
   const [callObject, setCallObject] = useState<Hooks.Connection | null>(null);
@@ -23,10 +24,12 @@ const ChatPage = (props: Component.ChatPageProps) => {
 
   const { countOnlineUsers } = useCounter();
   const currentlyActiveUsers = countOnlineUsers(props.users);
+  const { getUsers } = useUsers();
   useAnswerCall(setAnswerObject, setIsIncomingCall);
   useAudio(isIncomingCall);
   useNotification(isIncomingCall);
-  const activeUsers = getUsers(props.users, socket.id);
+  useIdentifyCaller(setCaller);
+  const activeUsers = useMemo(() => getUsers(props.users, socket.id), [props.users, socket.id]);
 
   const chatHistory = [
     { sender: "User 1", message: "Hello there!" },
@@ -42,14 +45,14 @@ const ChatPage = (props: Component.ChatPageProps) => {
     // Add more chat messages here if needed
   ];
 
-  const handleUserSelect = (user: any) => {
-    setSelectedUser(user);
-  };
+  const handleUserSelect = useCallback(() => {
+    setSelectedUser("ab");
+  }, []);
 
-  const handleVideoClick = (peerid: string) => {
-    setCalleeId(peerid);
+  const handleVideoClick = useCallback((user: TActiveUsers) => {
+    setCallie(user);
     setIsCall(!isCall);
-  };
+  }, []);
 
   const handleCallScreenToggle = () => {
     setIsCall(!isCall);
@@ -58,11 +61,22 @@ const ChatPage = (props: Component.ChatPageProps) => {
   const handleAnswerCall = () => {
     setIsCall(true);
     setIsIncomingCall(false);
+    // socket.emit('call-connected', {caller: })
+  };
+
+  const handleRejectCall = () => {
+    setIsIncomingCall(false);
   };
 
   return (
     <>
-      {isIncomingCall && <Popup handleAnswerCall={handleAnswerCall} />}
+      {isIncomingCall && !!caller && (
+        <Popup
+          caller={caller}
+          handleAnswerCall={handleAnswerCall}
+          handleRejectCall={handleRejectCall}
+        />
+      )}
       <CallScreen
         remoteStream={remoteStream}
         setRemoteStream={setRemoteStream}
@@ -70,7 +84,7 @@ const ChatPage = (props: Component.ChatPageProps) => {
         setLocalStream={setLocalStream}
         callObject={callObject}
         setCallObject={setCallObject}
-        calleeid={calleeid}
+        callie={callie}
         visible={isCall}
         toggle={handleCallScreenToggle}
         answerObject={answerObject}

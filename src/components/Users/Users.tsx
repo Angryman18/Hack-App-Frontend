@@ -1,6 +1,8 @@
 import PicGenerator from "../PicGenerator/PicGenerator";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
 import WifiCallingOutlinedIcon from "@mui/icons-material/WifiCallingOutlined";
+import { memo } from "react";
+import colors from "@/const/colors";
 
 function Users({
   activeUsers,
@@ -10,7 +12,7 @@ function Users({
 }: Component.Users): JSX.Element {
   return (
     <>
-      {activeUsers.map((user: TActiveUsers) => (
+      {activeUsers.map((user: TActiveUsers, idx: number) => (
         <li
           key={user.peerid}
           className={`flex items-center p-2 rounded-lg mb-2 cursor-pointer ${
@@ -20,12 +22,16 @@ function Users({
           }`}
           onClick={() => handleUserSelect(user)}
         >
-          <PicGenerator currentUser={user.currentUser!} ID={user.socketid} />
-          <span className='mr-2'>{user.currentUser ? "You" : user.socketid}</span>
+          <PicGenerator
+            colorID={idx > colors.length ? colors[idx % colors.length] : colors[idx]}
+            currentUser={user.currentUser!}
+            ID={user.socketid}
+          />
+          <span className='mr-2'>{user.currentUser ? "You - " + (user.socketid) : user.socketid}</span>
           {!user.currentUser && (
             <div className='flex items-center ml-auto'>
               <VideocamOutlinedIcon
-                onClick={handleVideoClick.bind(null, user.peerid)}
+                onClick={handleVideoClick.bind(null, user)}
                 className={`icon text-blue-500 ${
                   selectedUser === user.socketid ? "text-white" : ""
                 }`}
@@ -46,4 +52,4 @@ function Users({
   );
 }
 
-export default Users;
+export default memo(Users);

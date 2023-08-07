@@ -3,21 +3,26 @@ import React from "react";
 
 declare global {
   declare type KeyPick<Interface, Key> = Key extends keyof Interface ? Interface[Key] : never;
-  type TPeerInfo = { peerid: string; [key: string]: string };
+  type TPeerInfo = { peerid: string; status?: string; [key: string]: string };
   type TUser = [string, TPeerInfo];
   type TUsers = { [key: string]: peerInfo };
   interface TActiveUsers extends TUsers, TPeerInfo {
     socketid: string;
     currentUser?: boolean;
   }
+  interface Caller extends TActiveUsers {
+    caller: string;
+  }
 
-  declare type setMediaStream = (MediaStream: MediaStream | null) => void | any;
-  declare type setErrorMedia = (Error: Error | null) => void | any;
+  declare type StateSetter<K> = (data: K) => void | K;
+
+  // declare type setMediaStream = (MediaStream: MediaStream | null) => void | any;
+  // declare type setErrorMedia = (Error: Error | null) => void | any;
   // declare type setRemoteStream = (MediaStream: MediaStream | null) => void | any;
-  declare type setIsMediaLoading = (val: boolean) => void | any;
+  // declare type setIsMediaLoading = (val: boolean) => void | any;
   declare type callTheUser = (socketId: string, localStream: MediaStream) => void | any;
-  declare type setIsIncomingCall = (val: boolean) => void | any;
-  declare type setCallObject = (MediaConnection: MediaConnection | null) => void | any;
+  // declare type setIsIncomingCall = (val: boolean) => void | any;
+  // declare type setCallObject = (MediaConnection: MediaConnection | null) => void | any;
 
   declare type setVideoEnabled = setIsMediaLoading;
   declare type setIsMute = setIsMediaLoading;
@@ -65,15 +70,15 @@ declare global {
     declare type CallScreen = {
       visible: boolean;
       toggle: () => void | any;
-      calleeid?: string;
+      callie?: TActiveUsers;
       remoteStream: MediaStream | null;
       setRemoteStream: setMediaStream;
       localStream: MediaStream | null;
       setLocalStream: setMediaStream;
       answerObject: Hooks.Connection | null;
       callObject: Hooks.Connection | null;
-      setCallObject: setCallObject;
-      setAnswerObject: setCallObject;
+      setCallObject: StateSetter<Hooks.Connection | null>;
+      setAnswerObject: StateSetter<Hooks.Connection | null>;
     };
 
     declare type Mute = {
@@ -87,9 +92,15 @@ declare global {
 
     declare type Users = {
       activeUsers: TActiveUsers[];
-      handleUserSelect: (use: TActiveUsers) => void | any;
+      handleUserSelect: (user: TActiveUsers) => void | any;
       selectedUser: string;
-      handleVideoClick: (peerid: KeyPick<TPeerInfo, "peerid">) => void | any;
+      handleVideoClick: (user: TActiveUsers) => void | any;
+    };
+
+    declare type Popup = {
+      handleAnswerCall: () => void | any;
+      handleRejectCall: () => void | any;
+      caller: Caller | null;
     };
   }
 }

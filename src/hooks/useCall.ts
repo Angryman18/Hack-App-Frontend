@@ -1,8 +1,8 @@
 import peer from "@/service/peerService";
 
 export default function useCall(
-  setRemoteStream: setMediaStream,
-  setCallObject: setCallObject
+  setRemoteStream: StateSetter<MediaStream | null>,
+  setCallObject: StateSetter<Hooks.Connection | null>
 ): { callTheUser: callTheUser } {
   const callTheUser = (peerid: string, localStream: MediaStream) => {
     const call: Hooks.Connection = peer.call(peerid, localStream);

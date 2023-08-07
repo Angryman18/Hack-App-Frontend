@@ -1,9 +1,11 @@
-export default function Popup({ handleAnswerCall, handleRejectCall }: any) {
+export default function Popup({ handleAnswerCall, handleRejectCall, caller }: Component.Popup) {
   return (
     <div className='fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50'>
       <div className='bg-white p-4 rounded-lg shadow-lg w-80'>
         <div className='flex justify-between items-center mb-4'>
-          <h3 className='text-xl font-semibold'>Incoming Call</h3>
+          <h3 className='text-xl font-semibold'>
+            Incoming Call from <b>{caller!.caller}</b>
+          </h3>
           <button className='text-red-500 hover:text-red-700'>
             <svg
               className='w-5 h-5'

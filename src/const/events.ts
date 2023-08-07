@@ -1,0 +1,5 @@
+const EVENTS = {
+  CALLING_USER: "CALLING_USER",
+  INCOMING_CALL: "INCOMING_CALL",
+};
+export default EVENTS;

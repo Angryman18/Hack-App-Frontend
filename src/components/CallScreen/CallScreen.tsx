@@ -11,11 +11,13 @@ import CircularProgress from "@mui/material/CircularProgress";
 import useAnswerRedirect from "@/hooks/useAnswerRedirect";
 import useResetActions from "@/hooks/useResetActions";
 import End from "../StreamElements/End";
+import socket from "@/service/socketService";
+import EVENTS from "@/const/events";
 
 export default function CallScreen({
   visible,
   toggle,
-  calleeid,
+  callie,
   localStream,
   remoteStream,
   setLocalStream,
@@ -66,8 +68,9 @@ export default function CallScreen({
   };
 
   const handleClickCall = () => {
-    if (localStream) {
-      callTheUser(calleeid!, localStream);
+    if (localStream && callie?.peerid) {
+      socket.emit(EVENTS.CALLING_USER, { caller: socket.id, ...callie });
+      callTheUser(callie.peerid, localStream);
     }
   };
 
