@@ -13,6 +13,7 @@ import useResetActions from "@/hooks/useResetActions";
 import End from "../StreamElements/End";
 import socket from "@/service/socketService";
 import EVENTS from "@/const/events";
+// import audioService from "@/service/audioService";
 
 export default function CallScreen({
   visible,
@@ -44,6 +45,7 @@ export default function CallScreen({
   const { callTheUser } = useCall(setRemoteStream, setCallObject);
 
   const onClose = () => {
+    // await audioService.NonLoop.playDisconnect();
     localStream?.getTracks().forEach((track: MediaStreamTrack) => {
       track.stop();
     });

@@ -14,6 +14,8 @@ declare global {
     caller: string;
   }
 
+  declare type TstatusObject = {socketIds: string[], status: string}
+
   declare type StateSetter<K> = (data: K) => void | K;
 
   // declare type setMediaStream = (MediaStream: MediaStream | null) => void | any;

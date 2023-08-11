@@ -3,11 +3,13 @@ import ChatPage from "@/components/Chatpage";
 import socket from "socket";
 import useOnlineUsers from "@/hooks/useOnlineUsers";
 import useInit from "@/hooks/useInit";
+import useUpdateUserStatus from "@/hooks/useUpdateUserStatus";
 
 function ChatRoom() {
   // HOOKS DECLARATION
   const [users, setUsers] = useState<TUsers>({});
   useOnlineUsers(setUsers);
+  useUpdateUserStatus(users, setUsers)
   useInit();
 
   useEffect(() => {

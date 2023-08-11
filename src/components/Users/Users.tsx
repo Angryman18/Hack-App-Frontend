@@ -43,8 +43,8 @@ function Users({
               />
             </div>
           )}
-          <div className='text-[10px] font-semibold border border-green-200 text-green-700 bg-green-50 rounded-full px-2 py-0.5'>
-            in call
+          <div className='text-[10px] ml-auto font-semibold border border-green-200 text-green-700 bg-green-50 rounded-full px-2 py-0.5'>
+            {user?.status}
           </div>
         </li>
       ))}

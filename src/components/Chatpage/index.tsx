@@ -6,10 +6,13 @@ import socket from "socket";
 import CallScreen from "../CallScreen/CallScreen";
 import useAnswerCall from "@/hooks/useAnswerCall";
 import Popup from "../Popup/Popup";
-import useAudio from "@/hooks/useAudio";
+// import useAudio from "@/hooks/useAudio";
 import useNotification from "@/hooks/useNotification";
 import Users from "../Users/Users";
 import useIdentifyCaller from "@/hooks/useIdentifyCaller";
+import EVENTS from "@/const/events";
+import audioService from "@/service/audioService";
+import useDisconnectionSound from "@/hooks/useDisconnectionSound";
 
 const ChatPage = (props: Component.ChatPageProps) => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
@@ -26,7 +29,8 @@ const ChatPage = (props: Component.ChatPageProps) => {
   const currentlyActiveUsers = countOnlineUsers(props.users);
   const { getUsers } = useUsers();
   useAnswerCall(setAnswerObject, setIsIncomingCall);
-  useAudio(isIncomingCall);
+  useDisconnectionSound(callObject, answerObject);
+  // useAudio(isIncomingCall);
   useNotification(isIncomingCall);
   useIdentifyCaller(setCaller);
   const activeUsers = useMemo(() => getUsers(props.users, socket.id), [props.users, socket.id]);
@@ -61,11 +65,14 @@ const ChatPage = (props: Component.ChatPageProps) => {
   const handleAnswerCall = () => {
     setIsCall(true);
     setIsIncomingCall(false);
+    audioService.Loop.stopAudio();
+    socket.emit(EVENTS.CALL_ANSWERED, caller);
     // socket.emit('call-connected', {caller: })
   };
 
   const handleRejectCall = () => {
     setIsIncomingCall(false);
+    audioService.Loop.stopAudio();
   };
 
   return (
