@@ -9,7 +9,6 @@ function ChatRoom() {
   // HOOKS DECLARATION
   const [users, setUsers] = useState<TUsers>({});
   useOnlineUsers(setUsers);
-  useUpdateUserStatus(users, setUsers)
   useInit();
 
   useEffect(() => {
@@ -24,7 +23,7 @@ function ChatRoom() {
 
   return (
     <div>
-      <ChatPage users={users} />
+      <ChatPage users={users} setUsers={setUsers} />
     </div>
   );
 }

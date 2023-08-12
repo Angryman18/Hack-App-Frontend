@@ -14,7 +14,7 @@ declare global {
     caller: string;
   }
 
-  declare type TstatusObject = {socketIds: string[], status: string}
+  declare type TstatusObject = {socketIds: string[], status: string, callId: string }
 
   declare type StateSetter<K> = (data: K) => void | K;
 
@@ -53,6 +53,7 @@ declare global {
   namespace Component {
     declare type ChatPageProps = {
       users: TUsers;
+      setUsers: StateSetter<TUsers>
     };
     declare type ModalProps = {
       open: boolean;

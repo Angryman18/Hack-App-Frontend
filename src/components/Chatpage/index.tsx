@@ -12,7 +12,9 @@ import Users from "../Users/Users";
 import useIdentifyCaller from "@/hooks/useIdentifyCaller";
 import EVENTS from "@/const/events";
 import audioService from "@/service/audioService";
-import useDisconnectionSound from "@/hooks/useDisconnectionSound";
+import useCallDisconnection from "@/hooks/useCallDisconnection";
+import useUpdateUserStatus from "@/hooks/useUpdateUserStatus";
+import useNotifyCallDisconnect from "@/hooks/useNotifyCallDisconnect";
 
 const ChatPage = (props: Component.ChatPageProps) => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
@@ -23,16 +25,19 @@ const ChatPage = (props: Component.ChatPageProps) => {
   const [isIncomingCall, setIsIncomingCall] = useState<boolean>(false);
   const [answerObject, setAnswerObject] = useState<Hooks.Connection | null>(null);
   const [callObject, setCallObject] = useState<Hooks.Connection | null>(null);
+  const [callId, setCallid] = useState<string>("");
   const [selectedUser, setSelectedUser] = useState<any>(null);
 
+  // useAudio(isIncomingCall);
   const { countOnlineUsers } = useCounter();
   const currentlyActiveUsers = countOnlineUsers(props.users);
   const { getUsers } = useUsers();
   useAnswerCall(setAnswerObject, setIsIncomingCall);
-  useDisconnectionSound(callObject, answerObject);
-  // useAudio(isIncomingCall);
+  useCallDisconnection(callObject, answerObject, callId, setCallid);
+  useNotifyCallDisconnect(setRemoteStream);
   useNotification(isIncomingCall);
   useIdentifyCaller(setCaller);
+  useUpdateUserStatus(props.users, props.setUsers, setCallid);
   const activeUsers = useMemo(() => getUsers(props.users, socket.id), [props.users, socket.id]);
 
   const chatHistory = [

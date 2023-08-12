@@ -45,7 +45,6 @@ export default function CallScreen({
   const { callTheUser } = useCall(setRemoteStream, setCallObject);
 
   const onClose = () => {
-    // await audioService.NonLoop.playDisconnect();
     localStream?.getTracks().forEach((track: MediaStreamTrack) => {
       track.stop();
     });
