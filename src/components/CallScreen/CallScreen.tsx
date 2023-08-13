@@ -77,9 +77,9 @@ export default function CallScreen({
 
   return (
     <Modal open={visible} toggle={toggle} onClose={onClose}>
-      <Typography sx={{ margin: "auto", marginBottom: 2 }} variant='h4'>
+      {!remoteStream && <Typography sx={{ margin: "auto", marginBottom: 2 }} variant='h4'>
         Are you ready?
-      </Typography>
+      </Typography>}
       <Stack direction='row' justifyContent='space-around' gap={4}>
         {!isMediaLoading && (
           <StreamPlayer playing width={720} height={405} url={localStream!} muted />
@@ -100,7 +100,7 @@ export default function CallScreen({
         <Video videoEnabled={videoEnabled} onClick={handleVideoClick} />
         <End onClick={onClose} />
       </Stack>
-      <Stack
+      {!answerObject && <Stack
         sx={{ marginTop: 4 }}
         justifyContent='center'
         direction='row'
@@ -108,7 +108,7 @@ export default function CallScreen({
         alignItems='center'
       >
         <MyButton onClick={handleClickCall} />
-      </Stack>
+      </Stack>}
     </Modal>
   );
 }

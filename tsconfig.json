@@ -26,6 +26,7 @@
       "@/hooks/*": ["./src/hooks/*"],
       "@/views/*": ["./src/views/*"],
       "@/service/*": ["./src/Service/*"],
+      "@/json/*": ["./src/JSON/*"],
       "socket": ["./src/Service/socketService"],
       "peer": ["./src/Service/peerService"]
     }

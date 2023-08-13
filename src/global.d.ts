@@ -14,7 +14,7 @@ declare global {
     caller: string;
   }
 
-  declare type TstatusObject = {socketIds: string[], status: string, callId: string }
+  declare type TstatusObject = { socketIds: string[]; status: string; callId: string };
 
   declare type StateSetter<K> = (data: K) => void | K;
 
@@ -28,6 +28,7 @@ declare global {
 
   declare type setVideoEnabled = setIsMediaLoading;
   declare type setIsMute = setIsMediaLoading;
+  declare type TypeCall = 'audio' | 'video'
 
   interface SourceProps {
     media?: string;
@@ -53,8 +54,22 @@ declare global {
   namespace Component {
     declare type ChatPageProps = {
       users: TUsers;
-      setUsers: StateSetter<TUsers>
+      setUsers: StateSetter<TUsers>;
     };
+
+    declare type ChatPageProps2 = {
+      users: TUsers;
+      setUsers: StateSetter<TUsers>;
+      setMessage: StateSetter<string>,
+      setOpen: StateSetter<boolean>
+    };
+
+    declare type NotificationProps = {
+      open: boolean;
+      handleClose: (...args: any[]) => void | any;
+      message: string;
+    };
+
     declare type ModalProps = {
       open: boolean;
       toggle?: () => void | any;
@@ -95,9 +110,10 @@ declare global {
 
     declare type Users = {
       activeUsers: TActiveUsers[];
-      handleUserSelect: (user: TActiveUsers) => void | any;
+      // handleUserSelect: (user: TActiveUsers) => void | any;
       selectedUser: string;
       handleVideoClick: (user: TActiveUsers) => void | any;
+      handleAudioClick: (user: TActiveUsers) => void | any;
     };
 
     declare type Popup = {

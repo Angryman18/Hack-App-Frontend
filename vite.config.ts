@@ -11,6 +11,7 @@ export default defineConfig({
     alias: {
       "@/components": "/src/components",
       "@/const": "/src/const",
+      "@/json": "/src/JSON",
       socket: "/src/Service/socketService",
       peer: "/src/Service/peerService",
       "@/hooks": "/src/hooks",

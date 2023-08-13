@@ -15,6 +15,9 @@ import audioService from "@/service/audioService";
 import useCallDisconnection from "@/hooks/useCallDisconnection";
 import useUpdateUserStatus from "@/hooks/useUpdateUserStatus";
 import useNotifyCallDisconnect from "@/hooks/useNotifyCallDisconnect";
+import useTrackStop from "@/hooks/useTrackStop";
+import ChatScreen from "../ChatScreen";
+import useCallReject from "@/hooks/useCallReject";
 
 const ChatPage = (props: Component.ChatPageProps) => {
   const [remoteStream, setRemoteStream] = useState<MediaStream | null>(null);
@@ -26,39 +29,37 @@ const ChatPage = (props: Component.ChatPageProps) => {
   const [answerObject, setAnswerObject] = useState<Hooks.Connection | null>(null);
   const [callObject, setCallObject] = useState<Hooks.Connection | null>(null);
   const [callId, setCallid] = useState<string>("");
-  const [selectedUser, setSelectedUser] = useState<any>(null);
 
   // useAudio(isIncomingCall);
   const { countOnlineUsers } = useCounter();
   const currentlyActiveUsers = countOnlineUsers(props.users);
   const { getUsers } = useUsers();
-  useAnswerCall(setAnswerObject, setIsIncomingCall);
+  useAnswerCall(
+    setAnswerObject,
+    setIsIncomingCall,
+    setIsCall,
+    localStream,
+    setLocalStream,
+    setRemoteStream,
+    setCallObject,
+    answerObject,
+    callObject
+  );
+  const stopTrack = useTrackStop();
   useCallDisconnection(callObject, answerObject, callId, setCallid);
-  useNotifyCallDisconnect(setRemoteStream);
+  useNotifyCallDisconnect(setRemoteStream, setAnswerObject);
   useNotification(isIncomingCall);
   useIdentifyCaller(setCaller);
   useUpdateUserStatus(props.users, props.setUsers, setCallid);
+  useCallReject()
   const activeUsers = useMemo(() => getUsers(props.users, socket.id), [props.users, socket.id]);
 
-  const chatHistory = [
-    { sender: "User 1", message: "Hello there!" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 2", message: "Hey! How are you?" },
-    { sender: "User 200", message: "Hey! How are you?" },
-    // Add more chat messages here if needed
-  ];
-
-  const handleUserSelect = useCallback(() => {
-    setSelectedUser("ab");
+  const handleVideoClick = useCallback((user: TActiveUsers) => {
+    setCallie(user);
+    setIsCall(!isCall);
   }, []);
 
-  const handleVideoClick = useCallback((user: TActiveUsers) => {
+  const handleAudioClick = useCallback((user: TActiveUsers) => {
     setCallie(user);
     setIsCall(!isCall);
   }, []);
@@ -76,8 +77,14 @@ const ChatPage = (props: Component.ChatPageProps) => {
   };
 
   const handleRejectCall = () => {
+    stopTrack(localStream!);
     setIsIncomingCall(false);
+    answerObject?.close();
+    setAnswerObject(null);
+    setLocalStream(null);
+    setRemoteStream(null);
     audioService.Loop.stopAudio();
+    socket.emit(EVENTS.CALL_REJECTED, caller?.caller);
   };
 
   return (
@@ -111,45 +118,13 @@ const ChatPage = (props: Component.ChatPageProps) => {
           <ul className='active-users-list border'>
             <Users
               activeUsers={activeUsers}
-              handleUserSelect={handleUserSelect}
               handleVideoClick={handleVideoClick}
+              handleAudioClick={handleAudioClick}
               selectedUser='xyz'
             />
           </ul>
         </div>
-        <div className='chat-history relative'>
-          <h2 className='text-lg font-bold mb-4'>Chat History</h2>
-          <ul className='chat-history-list'>
-            {chatHistory.map((message, index) => (
-              <li
-                key={index + Math.random() * 1000}
-                className={`p-2 rounded-lg mb-2 ${
-                  message.sender === selectedUser?.name ? "bg-blue-100 font-bold" : ""
-                }`}
-              >
-                <strong>{message.sender}: </strong>
-                {message.message}
-              </li>
-            ))}
-          </ul>
-          <div className='absolute left-0 right-0 bottom-8 w-full'>
-            <div className='flex items-center'>
-              <input
-                type='text'
-                className='flex-1 border border-gray-300 rounded-lg px-4 py-2 mr-2 focus:outline-none'
-                placeholder='Type your message...'
-                // value={message}
-                // onChange={handleInputChange}
-              />
-              <button
-                className='bg-blue-500 text-white px-4 py-2 rounded-lg'
-                // onClick={sendMessage}
-              >
-                Send
-              </button>
-            </div>
-          </div>
-        </div>
+        <ChatScreen />
       </div>
     </>
   );

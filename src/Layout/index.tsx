@@ -1,12 +1,12 @@
-import Header from "../components/Header";
+// import Header from "../components/Header";
 import { Outlet } from "react-router-dom";
 
 function Layout() {
   return (
     <>
-      <div className='h-16'>
+      {/* <div className='h-16'>
         <Header />
-      </div>
+      </div> */}
       <Outlet />
     </>
   );

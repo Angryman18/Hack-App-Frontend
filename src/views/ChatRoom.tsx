@@ -3,9 +3,10 @@ import ChatPage from "@/components/Chatpage";
 import socket from "socket";
 import useOnlineUsers from "@/hooks/useOnlineUsers";
 import useInit from "@/hooks/useInit";
+// import Notification from "@/components/Notifications";
+import { Toaster } from "react-hot-toast";
 
 function ChatRoom() {
-  // HOOKS DECLARATION
   const [users, setUsers] = useState<TUsers>({});
   useOnlineUsers(setUsers);
   useInit();
@@ -23,6 +24,7 @@ function ChatRoom() {
   return (
     <div>
       <ChatPage users={users} setUsers={setUsers} />
+      <Toaster position='bottom-left' />
     </div>
   );
 }
